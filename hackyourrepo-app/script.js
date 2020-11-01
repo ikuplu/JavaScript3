@@ -12,21 +12,7 @@ const selectHeader = document.createElement('select');
 selectHeader.setAttribute("class", "repo-titles");
 selectHeader.id = 'repo-select';
 
-const optionOne = document.createElement('option');
-optionOne.innerText = '--Choose a repository--';
-selectHeader.appendChild(optionOne);
 
-const optionTwo = document.createElement('option');
-optionTwo.innerText = 'SampleRepo1';
-selectHeader.appendChild(optionTwo);
-
-const optionThree = document.createElement('option');
-optionThree.innerText = 'AndAnotherOne';
-selectHeader.appendChild(optionThree);
-
-const optionFour = document.createElement('option');
-optionFour.innerText = 'HYF-Is-The-Best';
-selectHeader.appendChild(optionFour);
 
 repoHeader.appendChild(pTagHeader);
 repoHeader.appendChild(selectHeader);
@@ -111,58 +97,69 @@ headerFooter.innerText = "HYF Repositories";
 footer.appendChild(headerFooter);
 document.body.appendChild(footer);
 //Footer ends
- 
 
+function populateSelect() {
+  const url = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
+  fetch(url)
+  .then(response => {
+    console.log(response);
+    if(response.ok) {
+      return response.json();
+    } 
+    else {
+      throw "HTTP ERROR";
+    }
+  })
+  .then(jsonData => {
+    const repos = jsonData.map(repo => {
+    let opt = document.createElement('option');
+    opt.innerText = repo.name;
+    selectHeader.appendChild(opt);
+    });
+  })
+  .catch(error => {
+    console.log(`${error} Something went wrong!`);
+  });
+}
 
-const placeholderRepos = [
-  {
-    name: 'SampleRepo1',
-    description: 'This repository is meant to be a sample',
-    forks: 5,
-    updated: '2020-05-27 12:00:00',
-  },
-  {
-    name: 'AndAnotherOne',
-    description: 'Another sample repo! Can you believe it?',
-    forks: 9,
-    updated: '2020-05-27 12:00:00',
-  },
-  {
-    name: 'HYF-Is-The-Best',
-    description:
-      "This repository contains all things HackYourFuture. That's because HYF is amazing!!!!",
-    forks: 130,
-    updated: '2020-05-27 12:00:00',
-  },
-];
+window.onload = populateSelect();
 
+//Repository information cells
 const selectRepo = document.getElementById('repo-select');
-
 let repositoryInfo = document.querySelector('td a');
 let descriptionInfo = document.getElementsByTagName('td')[3];
 let forksInfo = document.getElementsByTagName('td')[5];
 let updatedInfo = document.getElementsByTagName('td')[7];
 
+
 selectRepo.addEventListener('change', () => {
-  if (selectRepo.value === 'SampleRepo1') {
-    repositoryInfo.textContent = placeholderRepos[0].name;
-    descriptionInfo.textContent = placeholderRepos[0].description;
-    forksInfo.textContent = placeholderRepos[0].forks;
-    updatedInfo.textContent = placeholderRepos[0].updated;
-  }
-  if (selectRepo.value === 'AndAnotherOne') {
-    repositoryInfo.textContent = placeholderRepos[1].name;
-    descriptionInfo.textContent = placeholderRepos[1].description;
-    forksInfo.textContent = placeholderRepos[1].forks;
-    updatedInfo.textContent = placeholderRepos[1].updated;
-  }
-  if (selectRepo.value === 'HYF-Is-The-Best') {
-    repositoryInfo.textContent = placeholderRepos[2].name;
-    descriptionInfo.textContent = placeholderRepos[2].description;
-    forksInfo.textContent = placeholderRepos[2].forks;
-    updatedInfo.textContent = placeholderRepos[2].updated;
-  }
-});
+  const url = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
+  fetch(url)
+  .then(response => {
+    console.log(response);
+    if(response.ok) {
+      return response.json();
+    } 
+    else {
+      throw "HTTP ERROR";
+    }
+  })
+  .then(jsonData => {
+    jsonData.map(element => {
+      if (element.name === selectRepo.value) {
+        repositoryInfo.textContent = element.name;
+        descriptionInfo.textContent = element.description;
+        forksInfo.textContent = element.forks_count;
+        updatedInfo.textContent = element.updated_at;
+      }
+    })
+  })
+  .catch(error => {
+    console.log(error);
+  });
+})
+
+
 
 
 
