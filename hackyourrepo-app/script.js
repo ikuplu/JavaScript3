@@ -5,15 +5,12 @@
 //First section
 const main = document.createElement('main');
 const repoHeader = document.createElement('section');
-repoHeader.setAttribute("class", "repo-header");
+repoHeader.setAttribute('class', 'repo-header');
 const pTagHeader = document.createElement('p');
 pTagHeader.innerText = 'HYF Repositories';
 const selectHeader = document.createElement('select');
-selectHeader.setAttribute("class", "repo-titles");
+selectHeader.setAttribute('class', 'repo-titles');
 selectHeader.id = 'repo-select';
-
-
-
 repoHeader.appendChild(pTagHeader);
 repoHeader.appendChild(selectHeader);
 main.appendChild(repoHeader);
@@ -22,16 +19,16 @@ document.body.appendChild(main);
 
 //Second section
 const repoInfo = document.createElement('section');
-repoInfo.setAttribute("class", "repo-info");
+repoInfo.setAttribute('class', 'card repo-info');
 const infoContainer = document.createElement('div');
-infoContainer.setAttribute("class", "card repo-info-container");
+infoContainer.setAttribute('class', 'repo-info-container');
 const table = document.createElement('table');
 
 const tableRowOne = document.createElement('tr');
 let dataOne = document.createElement('td');
 dataOne.innerText = 'Repository:';
 let dataTwo = document.createElement('td');
-dataTwo.innerHTML = '<a href="#"></a>';
+dataTwo.innerHTML = '<a href=""></a>';
 tableRowOne.appendChild(dataOne);
 tableRowOne.appendChild(dataTwo);
 
@@ -67,62 +64,51 @@ main.appendChild(repoInfo);
 
 //Third section
 const repoContributors = document.createElement('section');
-repoContributors.setAttribute("class", "repo-contributors");
+repoContributors.setAttribute('class', 'repo-contributors');
 let headerContributors = document.createElement('p');
-headerContributors.setAttribute("class", "card");
-headerContributors.innerText = "Contributors";
-let cardContributor = document.createElement('div');
-cardContributor.setAttribute("class", "card card-contributor");
-let imgContributor = document.createElement('img');
-imgContributor.src = "https://avatars0.githubusercontent.com/u/15912395?v=4";
-let gitHubContributor = document.createElement('a');
-gitHubContributor.href = "https://github.com/gijscor";
-gitHubContributor.innerText = "gijscor";
-let numContribution = document.createElement('div');
-numContribution.setAttribute("class", "num-contribution");
-numContribution.innerText = "10";
-
-cardContributor.appendChild(imgContributor);
-cardContributor.appendChild(gitHubContributor);
-cardContributor.appendChild(numContribution);
+headerContributors.setAttribute('class', 'card');
+headerContributors.innerText = 'Contributors';
+let cardContainer = document.createElement('div');
 repoContributors.appendChild(headerContributors);
-repoContributors.appendChild(cardContributor);
 main.appendChild(repoContributors);
 //Third section ends
 
 //Footer
 const footer = document.createElement('footer');
 let headerFooter = document.createElement('p');
-headerFooter.innerText = "HYF Repositories";
+headerFooter.innerText = 'HYF Repositories';
 footer.appendChild(headerFooter);
 document.body.appendChild(footer);
 //Footer ends
 
+function errorMessage() {
+  repoInfo.style.display = 'none';
+  repoContributors.style.display = 'none';
+  selectRepo.style.display = 'none';
+  const errorMessage = document.createElement('p');
+  errorMessage.innerText = 'Network request failed';
+  errorMessage.style.background = 'rgb(248, 215, 218)';
+  errorMessage.style.padding = '1rem 1rem';
+  main.appendChild(errorMessage);
+}
+
 function populateSelect() {
   const url = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
   fetch(url)
-  .then(response => {
-    console.log(response);
-    if(response.ok) {
+    .then(response => {
       return response.json();
-    } 
-    else {
-      throw "HTTP ERROR";
-    }
-  })
-  .then(jsonData => {
-    const repos = jsonData.map(repo => {
-    let opt = document.createElement('option');
-    opt.innerText = repo.name;
-    selectHeader.appendChild(opt);
+    })
+    .then(jsonData => {
+      jsonData.map(repo => {
+        let opt = document.createElement('option');
+        opt.innerText = repo.name;
+        selectHeader.appendChild(opt);
+      });
+    })
+    .catch(() => {
+      errorMessage();
     });
-  })
-  .catch(error => {
-    console.log(`${error} Something went wrong!`);
-  });
 }
-
-window.onload = populateSelect();
 
 //Repository information cells
 const selectRepo = document.getElementById('repo-select');
@@ -131,35 +117,57 @@ let descriptionInfo = document.getElementsByTagName('td')[3];
 let forksInfo = document.getElementsByTagName('td')[5];
 let updatedInfo = document.getElementsByTagName('td')[7];
 
+function getRepoInfo() {
+  const reposUrl =
+    'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
+  let contributorsUrl;
+  cardContainer.innerHTML = '';
 
-selectRepo.addEventListener('change', () => {
-  const url = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
-  fetch(url)
-  .then(response => {
-    console.log(response);
-    if(response.ok) {
-      return response.json();
-    } 
-    else {
-      throw "HTTP ERROR";
-    }
-  })
-  .then(jsonData => {
-    jsonData.map(element => {
-      if (element.name === selectRepo.value) {
-        repositoryInfo.textContent = element.name;
-        descriptionInfo.textContent = element.description;
-        forksInfo.textContent = element.forks_count;
-        updatedInfo.textContent = element.updated_at;
-      }
+  axios
+    .get(reposUrl)
+    .then(response => {
+      response.data.forEach(element => {
+        if (element.name === selectRepo.value) {
+          repositoryInfo.textContent = element.html_url;
+          repositoryInfo.href = element.html_url;
+          repositoryInfo.target = '_blank';
+          descriptionInfo.textContent = element.description;
+          forksInfo.textContent = element.forks_count;
+          updatedInfo.textContent = element.updated_at;
+          contributorsUrl = element.contributors_url;
+        }
+      });
+      return axios.get(contributorsUrl);
     })
-  })
-  .catch(error => {
-    console.log(error);
-  });
-})
+    .then(response => {
+      response.data.forEach(element => {
+        let imgContributor = document.createElement('img');
+        let gitHubContributor = document.createElement('a');
+        let numContribution = document.createElement('div');
+        numContribution.setAttribute('class', 'num-contribution');
+        let cardContributor = document.createElement('div');
+        cardContributor.setAttribute('class', 'card card-contributor');
 
+        imgContributor.src = element.avatar_url;
+        gitHubContributor.textContent = element.login;
+        gitHubContributor.href = element.url;
+        numContribution.textContent = element.contributions;
 
+        cardContributor.appendChild(imgContributor);
+        cardContributor.appendChild(gitHubContributor);
+        cardContributor.appendChild(numContribution);
+        cardContainer.appendChild(cardContributor);
+        repoContributors.appendChild(cardContainer);
+      });
+    })
+    .catch(() => {
+      errorMessage();
+    });
+}
 
+const mainFunc = () => {
+  populateSelect();
+  selectRepo.addEventListener('change', getRepoInfo);
+};
 
-
+window.onload = mainFunc();
