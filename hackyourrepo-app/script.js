@@ -1,6 +1,7 @@
 'use strict';
 
 // const { doc } = require("prettier");
+import { logErrorMessage } from './logErrorMessage.js';
 
 //First section
 const main = document.createElement('main');
@@ -81,16 +82,16 @@ footer.appendChild(headerFooter);
 document.body.appendChild(footer);
 //Footer ends
 
-function errorMessage() {
-  repoInfo.style.display = 'none';
-  repoContributors.style.display = 'none';
-  selectRepo.style.display = 'none';
-  const errorMessage = document.createElement('p');
-  errorMessage.innerText = 'Network request failed';
-  errorMessage.style.background = 'rgb(248, 215, 218)';
-  errorMessage.style.padding = '1rem 1rem';
-  main.appendChild(errorMessage);
-}
+// function logErrorMessage() {
+//   repoInfo.style.display = 'none';
+//   repoContributors.style.display = 'none';
+//   selectRepo.style.display = 'none';
+//   const errorMessage = document.createElement('p');
+//   errorMessage.innerText = 'Network request failed';
+//   errorMessage.style.background = 'rgb(248, 215, 218)';
+//   errorMessage.style.padding = '1rem 1rem';
+//   main.appendChild(errorMessage);
+// }
 
 function populateSelect() {
   const url = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
@@ -106,7 +107,7 @@ function populateSelect() {
       });
     })
     .catch(() => {
-      errorMessage();
+      logErrorMessage();
     });
 }
 
@@ -161,7 +162,7 @@ function getRepoInfo() {
       });
     })
     .catch(() => {
-      errorMessage();
+      logErrorMessage();
     });
 }
 
