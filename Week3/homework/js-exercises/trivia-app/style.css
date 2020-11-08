@@ -1,0 +1,48 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+h4 {
+  margin: 0 15%;
+}
+
+ul {
+  list-style-type: none;
+  margin: 2rem 15% 0 15%;
+}
+
+li {
+  background-color: rgb(180, 196, 230);
+  cursor: pointer;
+}
+
+p {
+  padding: 1rem 2rem;
+  border: 1px solid;
+}
+
+.answer-hide {
+  display: none;
+}
+
+.answer-show {
+  display: block;
+  background-color: rgb(226, 232, 245);
+  cursor: default;
+  font-weight: bolder;
+}
+
+button {
+  position: absolute;
+  top: 15%;
+  left: 70%;
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+}
