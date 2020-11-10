@@ -1,6 +1,16 @@
 import logErrorMessage from './logErrorMessage.js';
-import { cardContainer, repoContributors, selectRepo, repositoryInfo, descriptionInfo, forksInfo, updatedInfo } from './script.js';
+import {
+  cardContainer,
+  repoContributors,
+  selectRepo,
+  repositoryInfo,
+  descriptionInfo,
+  forksInfo,
+  updatedInfo,
+} from './script.js';
+import createContributorsPaginated from './paginateContributors.js';
 
+export let arrContributors;
 export default function getRepoInfo() {
   const reposUrl =
     'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
@@ -24,25 +34,8 @@ export default function getRepoInfo() {
       return axios.get(contributorsUrl);
     })
     .then(response => {
-      response.data.forEach(element => {
-        const imgContributor = document.createElement('img');
-        const gitHubContributor = document.createElement('a');
-        const numContribution = document.createElement('div');
-        numContribution.setAttribute('class', 'num-contribution');
-        const cardContributor = document.createElement('div');
-        cardContributor.setAttribute('class', 'card card-contributor');
-
-        imgContributor.src = element.avatar_url;
-        gitHubContributor.textContent = element.login;
-        gitHubContributor.href = element.url;
-        numContribution.textContent = element.contributions;
-
-        cardContributor.appendChild(imgContributor);
-        cardContributor.appendChild(gitHubContributor);
-        cardContributor.appendChild(numContribution);
-        cardContainer.appendChild(cardContributor);
-        repoContributors.appendChild(cardContainer);
-      });
+      arrContributors = response.data;
+      createContributorsPaginated();
     })
     .catch(() => {
       logErrorMessage();
