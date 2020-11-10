@@ -1,12 +1,13 @@
 'use strict';
+
 // const { doc } = require("prettier");
 
-import createHeader from './headerSection.js';
-import createRepoInfo from './repoInfoSection.js';
-import createContributorInfo from './contributorInfoSection.js';
-import createFooter from './footer.js';
-import populateSelect from './populateSelectTag.js';
-import getRepoInfo from './getRepoInfo.js';
+import createHeader from './util/headerSection.js';
+import createRepoInfo from './util/repoInfoSection.js';
+import createContributorInfo from './util/contributorInfoSection.js';
+import createFooter from './util/footer.js';
+import populateSelect from './util/populateSelectTag.js';
+import getRepoInfo from './util/getRepoInfo.js';
 
 export const main = document.createElement('main');
 export const selectHeader = document.createElement('select');

@@ -1,4 +1,4 @@
-import { repoContributors, cardContainer } from './script.js';
+import { repoContributors, cardContainer } from '../script.js';
 import { arrContributors } from './getRepoInfo.js';
 
 export default function createContributorsPaginated() {
@@ -25,6 +25,7 @@ export default function createContributorsPaginated() {
 
   const setPage = event => {
     changePage(event.target.innerText);
+    event.target.style.color = 'red';
   };
 
   function changePage(page) {
@@ -66,34 +67,20 @@ export default function createContributorsPaginated() {
     pageButtonContainer.setAttribute('class', 'card card-button');
     const btnPrev = document.createElement('button');
     btnPrev.innerText = 'Prev';
-    const btnPageOne = document.createElement('button');
-    btnPageOne.innerText = '1';
-    const btnPageTwo = document.createElement('button');
-    btnPageTwo.innerText = '2';
-    const btnPageThree = document.createElement('button');
-    btnPageThree.innerText = '3';
-    const btnPageFour = document.createElement('button');
-    btnPageFour.innerText = '4';
-    const btnPageFive = document.createElement('button');
-    btnPageFive.innerText = '5';
+    pageButtonContainer.appendChild(btnPrev);
+
+    for (let i = 0; i < numPages(); i++) {
+      let pageNumBtn = document.createElement('button');
+      pageNumBtn.innerText = i + 1;
+      pageButtonContainer.appendChild(pageNumBtn);
+      pageNumBtn.addEventListener('click', setPage);
+    }
+
     const btnNext = document.createElement('button');
     btnNext.innerText = 'Next';
-
-    pageButtonContainer.appendChild(btnPrev);
-    pageButtonContainer.appendChild(btnPageOne);
-    pageButtonContainer.appendChild(btnPageTwo);
-    pageButtonContainer.appendChild(btnPageThree);
-    pageButtonContainer.appendChild(btnPageFour);
-    pageButtonContainer.appendChild(btnPageFive);
     pageButtonContainer.appendChild(btnNext);
     cardContainer.appendChild(pageButtonContainer);
-
     btnPrev.addEventListener('click', prevPage);
-    btnPageOne.addEventListener('click', setPage);
-    btnPageTwo.addEventListener('click', setPage);
-    btnPageThree.addEventListener('click', setPage);
-    btnPageFour.addEventListener('click', setPage);
-    btnPageFive.addEventListener('click', setPage);
     btnNext.addEventListener('click', nextPage);
 
     if (page === 1) {

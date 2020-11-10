@@ -1,13 +1,5 @@
 import logErrorMessage from './logErrorMessage.js';
-import {
-  cardContainer,
-  repoContributors,
-  selectRepo,
-  repositoryInfo,
-  descriptionInfo,
-  forksInfo,
-  updatedInfo,
-} from './script.js';
+import {cardContainer, repoContributors, selectRepo, repositoryInfo, descriptionInfo, forksInfo, updatedInfo } from '../script.js';
 import createContributorsPaginated from './paginateContributors.js';
 
 export let arrContributors;

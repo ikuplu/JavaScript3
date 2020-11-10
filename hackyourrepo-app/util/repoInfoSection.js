@@ -1,4 +1,4 @@
-import { repoInfo, main } from './script.js';
+import { repoInfo, main } from '../script.js';
 
 export default function createRepoInfo() {
   repoInfo.setAttribute('class', 'card repo-info');

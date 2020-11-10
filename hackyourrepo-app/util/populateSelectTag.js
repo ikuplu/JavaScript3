@@ -1,5 +1,5 @@
 import logErrorMessage from './logErrorMessage.js';
-import { selectHeader } from './script.js';
+import { selectHeader } from '../script.js';
 
 export default function populateSelect() {
   const url = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';

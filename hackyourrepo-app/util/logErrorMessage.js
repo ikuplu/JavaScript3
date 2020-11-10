@@ -1,4 +1,4 @@
-import { repoInfo, repoContributors, selectRepo, main } from './script.js';
+import { repoInfo, repoContributors, selectRepo, main } from '../script.js';
 
 export default function logErrorMessage() {
   repoInfo.style.display = 'none';
